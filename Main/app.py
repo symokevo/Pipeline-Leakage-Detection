@@ -1,11 +1,11 @@
 import sys
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-    QLabel, QLineEdit, QPushButton, QComboBox, QGroupBox, QMessageBox
+    QLabel, QLineEdit, QPushButton, QComboBox, QGroupBox, QMessageBox,
+    QInputDialog
 )
 from PyQt6.QtCore import Qt, QTimer
 from database import init_db, authenticate
-
 class LoginWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -73,17 +73,22 @@ class MainWindow(QMainWindow):
             sensor_frame = QWidget()
             sensor_layout = QHBoxLayout()
             
+            # Create the labels and store references directly
+            ir_label = QLabel("IR: Unknown")
+            water_label = QLabel("Water: Unknown")
+            status_label = QLabel("Status: Normal")
+            
             sensor_layout.addWidget(QLabel(f"Sensor {i+1}:"))
-            sensor_layout.addWidget(QLabel("IR: Unknown", objectName=f"ir_{i}"))
-            sensor_layout.addWidget(QLabel("Water: Unknown", objectName=f"water_{i}"))
-            sensor_layout.addWidget(QLabel("Status: Normal", objectName=f"status_{i}"))
+            sensor_layout.addWidget(ir_label)
+            sensor_layout.addWidget(water_label)
+            sensor_layout.addWidget(status_label)
             
             sensor_frame.setLayout(sensor_layout)
             status_layout.addWidget(sensor_frame)
             self.sensor_labels.append({
-                "ir": self.findChild(QLabel, f"ir_{i}"),
-                "water": self.findChild(QLabel, f"water_{i}"),
-                "status": self.findChild(QLabel, f"status_{i}")
+                "ir": ir_label,
+                "water": water_label,
+                "status": status_label
             })
         
         status_group.setLayout(status_layout)
